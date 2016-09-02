@@ -11,6 +11,8 @@ export function signinUser({ email, password }) {
     let grant_type = 'password';
 
     console.log("signing in: ");
+    console.log(email);
+    console.log(password);
     console.log({ grant_type, email, password });
 
     axios.post(`${ROOT_URL}/oauth/token`,
