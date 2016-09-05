@@ -48,8 +48,14 @@ server.register([
 server.route({
   method: "GET",
   path: "/{params*}",
+  config: {
+    state: {
+      parse: false, // parse and store in request.state
+      failAction: 'ignore' // may also be 'ignore' or 'log'
+    }
+  },
   handler: {
-    file: (request) => "dist/img" + request.path
+    file: (request) => "dist" + request.path
   }
 });
 /**
@@ -91,8 +97,10 @@ server.ext("onPreResponse", (request, reply) => {
     }
     const reactString = ReactDOM.renderToString(
       <Provider store={store}>
-        <RadiumContainer radiumConfig={{userAgent: request.headers['user-agent']}}>
-          <RouterContext {...renderProps} />
+        <RadiumContainer radiumConfig={{
+          userAgent: request.headers['user-agent']
+        }}>
+          <RouterContext {...renderProps}/>
         </RadiumContainer>
       </Provider>
     );
@@ -102,17 +110,24 @@ server.ext("onPreResponse", (request, reply) => {
     let output = (`<!doctype html>
     <html lang="en-us">
       <head>
-        <meta charset="utf-8">
-        <title>Hapi Universal Redux</title>
-        <link rel="shortcut icon" href="/favicon.ico">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <title>Decentral</title>
+
+        <link rel="stylesheet" href="css/vendor.bundle.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/app.css">
       </head>
       <body>
-        <div id="react-root">${reactString}</div>
+        <div id="app">${reactString}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
           window.__UA__ = ${JSON.stringify(request.headers['user-agent'])}
         </script>
-        <script src=${webserver}/dist/client.js></script>
+        <script src="js/vendor.bundle.js"></script>
+        <script src="js/app.bundle.js"></script>
       </body>
     </html>`);
     reply(output);

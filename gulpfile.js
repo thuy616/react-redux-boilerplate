@@ -64,7 +64,7 @@ var vendor = {
 var source = {
     scripts: {
         app: [paths.app + paths.scripts + '**/*.{jsx,js}'],
-        entry: [paths.app + paths.scripts + 'App.js']
+        entry: [paths.app + paths.scripts + 'client.js']
     },
     templates: {
         index: paths.app + 'index.html'
