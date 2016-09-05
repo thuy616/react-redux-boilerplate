@@ -7,7 +7,7 @@ class Signin extends Component {
   handleFormSubmit({ email, password }) {
     console.log(email, password);
     // send request to api using actionCreator
-    this.props.signinUser({email, password});
+    this.props.signinUser({ email, password });
   }
 
   render() {

@@ -265,7 +265,7 @@ gulp.task('watch', function() {
 
 });
 
-// Serve files with auto reaload
+// Serve files with auto reload
 gulp.task('browsersync', function() {
     log('Starting BrowserSync..');
 
@@ -279,6 +279,7 @@ gulp.task('browsersync', function() {
                     colors: true
                 }
             }),
+
             webpackHotMiddleware(bundler)
         ])
     }
@@ -286,6 +287,7 @@ gulp.task('browsersync', function() {
     browserSync({
         ui: false,
         port: config.port,
+        host: config.host,
         notify: false,
         server: {
             baseDir: paths.dist,

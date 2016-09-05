@@ -14,7 +14,5 @@ export default (
           <IndexRoute component={TourList} />
         </Route>
     </Route>
-
-
   </Router>
 );

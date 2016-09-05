@@ -5,7 +5,7 @@ module.exports = {
     entry: [
         'webpack/hot/dev-server',
         'webpack-hot-middleware',
-        path.resolve(__dirname, 'master/src/App')
+        path.resolve(__dirname, 'master/src/client')
     ],
     output: {
         path: path.resolve(__dirname, 'build'),
