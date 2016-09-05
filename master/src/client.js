@@ -6,7 +6,8 @@ import initTranslation from './components/Common/localize';
 import initLoadCss from './components/Common/load-css';
 import routes from './routes';
 import configureStore from "./store.js";
-import { syncHistoryWithStore } from 'react-router-redux'
+import { syncHistoryWithStore } from 'react-router-redux';
+import RadiumContainer from "./containers/RadiumContainer";
 
 // Init translation system
 initTranslation();
@@ -17,13 +18,16 @@ const store = configureStore(window.__INITIAL_STATE__);
 delete window.__INITIAL_STATE__;
 const history = syncHistoryWithStore(browserHistory, store)
 
-const createRoot = document.getElementById('app');
+const root = document.getElementById('app');
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} routes={routes}>
-    </Router>
-  </Provider>
+    <RadiumContainer>
+      <Router history={history} routes={routes}>
+      </Router>
+    </RadiumContainer>
+  </Provider>,
+  root
 );
 
 /**
