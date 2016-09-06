@@ -4,3 +4,4 @@ dist/
 .sass-cache
 *.css
 .DS_Store
+npm-debug.log

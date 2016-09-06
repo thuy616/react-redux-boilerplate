@@ -7,7 +7,7 @@ import { fetchGuides } from '../../actions/index';
 import Radium from 'radium';
 import { connect } from 'react-redux';
 
-class GuidesContainer extends React.Component {
+class Guides extends React.Component {
     render() {
         return (
           <div>

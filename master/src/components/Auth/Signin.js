@@ -6,7 +6,6 @@ import * as actions from '../../actions';
 class Signin extends Component {
   handleFormSubmit(fields) {
     // send request to api using actionCreator
-    console.log("fields: ", fields);
     this.props.signinUser(fields);
   }
 
