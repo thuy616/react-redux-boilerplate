@@ -35,11 +35,11 @@ class Guides extends React.Component {
 /**
  * Radium connect.
  */
-GuidesContainer = Radium(GuidesContainer);
+Guides = Radium(Guides);
 
 /**
  * Redux connect.
  */
 export default connect(
   state => ({ guides: state.guides })
-)(GuidesContainer)
+)(Guides)

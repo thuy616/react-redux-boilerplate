@@ -4,7 +4,7 @@ import {Grid, Row, Col, Dropdown, MenuItem} from 'react-bootstrap';
 import Base from '../../components/Layout/Base';
 import fetch from 'isomorphic-fetch';
 
-class Tours extends React.Component {
+export default class Tours extends React.Component {
 
     render() {
         return (
@@ -29,5 +29,3 @@ class Tours extends React.Component {
         );
     }
 }
-
-export default TourList;
