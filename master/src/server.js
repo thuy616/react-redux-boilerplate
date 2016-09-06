@@ -10,6 +10,8 @@ import RadiumContainer from './containers/RadiumContainer';
 import {Provider} from 'react-redux';
 import routesContainer from "./routes";
 import url from "url";
+import Wreck from 'wreck';
+
 let routes = routesContainer; // make a copy so that routes writable, routesContainer is read-only
 /**
  * Create Redux store, and get intitial state.
@@ -42,6 +44,7 @@ server.register([
     console.info("==> 🌎  Go to " + server.info.uri.toLowerCase());
   });
 });
+
 /**
  * Attempt to serve static requests from the public folder.
  */
@@ -58,24 +61,68 @@ server.route({
     file: (request) => "dist" + request.path
   }
 });
+
 /**
- * Endpoint that proxies all GitHub API requests to https://api.github.com.
+ * Endpoint that proxies all Detour API requests to https://api.detour.com.
  */
 server.route({
-  method: "GET",
-  path: "/api/{path*}",
+  method: ['GET', 'POST', 'PUT', 'DELETE'],
+  path: "/api/detour/{path*}",
   handler: {
     proxy: {
-      passThrough: true,
-      mapUri(request, callback) {
-        callback(null, url.format({protocol: "https", host: "api.detour.com", pathname: request.params.path, query: request.query}));
+      mapUri: function(request, callback) {
+        console.log("redirecting to https://api.detour.com");
+        let reqUrl = url.format({protocol: "https", host: "api.detour.com", pathname: request.params.path, query: request.query});
+        console.log(reqUrl);
+        callback(null, reqUrl);
       },
-      onResponse(err, res, request, reply, settings, ttl) {
-        reply(res);
+      onResponse: function(err, res, request, reply, settings, ttl) {
+        Wreck.read(res, { json: true }, function (err, payload) {
+          console.log(payload);
+          reply(payload);
+        });
       }
     }
   }
 });
+
+/**
+ * Endpoint for oauth token
+ * Basic Authentication header
+ */
+ server.route({
+   method: 'POST',
+   path: "/api/oauth/token",
+   handler: {
+     proxy: {
+       passThrough: true,
+       mapUri: function(request, callback) {
+         console.log("redirecting to https://api.detour.com");
+         let reqUrl = url.format({protocol: "https", host: "api.detour.com", pathname: "oauth/token", query: request.query});
+         callback(null, reqUrl);
+       },
+       onResponse: function(err, res, request, reply, settings, ttl) {
+         if (res.statusCode === 200 && !err) {
+           Wreck.read(res, { json: true }, function (err, payload) {
+             console.log("AUTH RESPONSE");
+             if (err) {
+               console.log(err);
+             } else {
+               console.log(payload);
+               reply(payload);
+             }
+           });
+         } else {
+           console.log(res.statusCode);
+           Wreck.read(res, { json: true }, function (err, payload) {
+             console.log("error: ", payload);
+           });
+         }
+       }
+     }
+   }
+ });
+
 /**
  * Catch dynamic requests here to fire-up React Router.
  */

@@ -1,34 +1,54 @@
 import config from '../../../config';
-import axios from 'axios';
 import { browserHistory } from 'react-router';
+import fetch from 'isomorphic-fetch';
+import FormData from 'form-data';
 
-const ROOT_URL = config.apiBaseUrl;
 const CLIENT_ID = config.clientId;
 const CLIENT_SECRET = config.clientSecret;
 
-export function signinUser({ email, password }) {
+let detourApi = config.detourApi;
 
+if (__CLIENT__) {
+  const { protocol, hostname, port } = window.location;
+  detourApi = `${protocol}//${hostname}:${port}/api`;
+}
+
+export function signinUser(payload) {
   return function(dispatch) {
-    axios.post(`${ROOT_URL}/oauth/token`,
+    return fetch(`${detourApi}/oauth/token`,
       {
-        data: { grant_type: 'password',
-          username: email,
-          password: password
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8',
+          "Authorization" : "Basic " + new Buffer(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64")
         },
-        auth: {
-          username: CLIENT_ID,
-          password: CLIENT_SECRET
-        }
+        body: JSON.stringify({
+          grant_type: payload.grant_type,
+          username: payload.email,
+          password: payload.password
+        })
       })
-      .then( response => {
+      .then((response) => { response.json() })
+      .then((value) => {
         // if request is glyphicon-folder-open
         // - update the state to indicate user is authenticated
         // - save the auth token
         // redirect to the route /Tours
         browserHistory.push('/tours');
       })
-      .catch(() => {
+      .catch((error) => {
         // if request is bad, show error to user
       })
   }
+}
+
+export function fetchGuides() {
+    return function(dispatch) {
+      return fetch(`${detourApi}/detour/guides`).then((response) => {
+        response.json();
+      }).then((value) => {
+        console.log(value);
+      });
+    }
 }

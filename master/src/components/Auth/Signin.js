@@ -4,14 +4,14 @@ import {reduxForm} from 'redux-form';
 import * as actions from '../../actions';
 
 class Signin extends Component {
-  handleFormSubmit({ email, password }) {
-    console.log(email, password);
+  handleFormSubmit(fields) {
     // send request to api using actionCreator
-    this.props.signinUser({ email, password });
+    console.log("fields: ", fields);
+    this.props.signinUser(fields);
   }
 
   render() {
-    const { handleSubmit, fields: { email, password }} = this.props;
+    const { handleSubmit, fields: { grant_type, email, password }} = this.props;
     return (
       <div className="block-center mt-xl wd-xl">
         {/* START panel */}
@@ -56,5 +56,8 @@ class Signin extends Component {
 
 export default reduxForm({
   form: 'signin',
-  fields: ['email', 'password']
+  fields: ['grant_type', 'email', 'password'],
+  initialValues: {
+    grant_type: 'password'
+  }
 }, null, actions)(Signin);

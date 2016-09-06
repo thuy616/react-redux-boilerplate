@@ -2,8 +2,10 @@ import React from 'react';
 import ContentWrapper from '../../components/Layout/ContentWrapper';
 import {Grid, Row, Col, Dropdown, MenuItem} from 'react-bootstrap';
 import Base from '../../components/Layout/Base';
+import fetch from 'isomorphic-fetch';
 
 class TourList extends React.Component {
+
     render() {
         return (
           <div>

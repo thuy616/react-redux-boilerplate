@@ -10,12 +10,11 @@ config.clientId = process.env.CLIENT_ID || 'aF2xUgsBQqkLFmXwDKQgP8dLe';
 config.clientSecret = process.env.CLIENT_SECRET || 'BPaXFopxaZZ72wh';
 
 if (config.env === 'development' || config.env === 'test') {
-  config.apiBaseUrl = `http://localhost:${config.port}/api`;
-  // config.apiBaseUrl = 'http://localhost:3100';
+  config.detourApi = "https://api.detour.com/v2";
 } else if (config.env === 'staging') {
-  config.apiBaseUrl = 'https://detour-api-v2-staging.herokuapp.com/v2'
+  config.detourApi = 'https://detour-api-v2-staging.herokuapp.com/v2'
 } else {
-  config.apiBaseUrl = 'https://api.detour.com'
+  config.detourApi = 'https://api.detour.com'
 }
 
 module.exports = config;

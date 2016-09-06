@@ -18,7 +18,7 @@ const store = configureStore(window.__INITIAL_STATE__);
 delete window.__INITIAL_STATE__;
 const history = syncHistoryWithStore(browserHistory, store)
 
-const root = document.getElementById('app');
+const reactRoot = document.getElementById('app');
 
 ReactDOM.render(
   <Provider store={store}>
@@ -27,7 +27,7 @@ ReactDOM.render(
       </Router>
     </RadiumContainer>
   </Provider>,
-  root
+  reactRoot
 );
 
 /**
