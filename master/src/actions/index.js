@@ -1,7 +1,7 @@
 import config from '../../../config';
 import { browserHistory } from 'react-router';
 import fetch from 'isomorphic-fetch';
-import { AUTH_USER } from './types';
+import { AUTH_USER, AUTH_ERROR, FETCH_USER_ME } from './types';
 import Wreck from 'wreck';
 
 const CLIENT_ID = config.clientId;
@@ -36,11 +36,12 @@ export function signinUser(payload) {
           // - update the state to indicate user is authenticated
           dispatch({ type: AUTH_USER });
           // - save the auth token
-          localStorage.setItem('auth', body.data);
+          localStorage.setItem('auth', JSON.stringify(body.data));
           // redirect to the route /Tours
           browserHistory.push('/tours');
         } else {
           // render error message
+          dispatch(authError("Incorrect username or password"));
         }
       })
       .catch((err) => {
@@ -49,12 +50,20 @@ export function signinUser(payload) {
   }
 }
 
-export function fetchGuides() {
-    return function(dispatch) {
-      return fetch(`${detourApi}/detour/guides`).then((response) => {
-        response.json();
-      }).then((value) => {
-        console.log(value);
-      });
-    }
+export function fetchCurrentUser() {
+  let auth = localStorage.getItem('auth');
+}
+
+export function authError(error) {
+  return {
+    type: AUTH_ERROR,
+    payload: error
+  }
+}
+
+export function currentUser(data) {
+  return {
+    type: FETCH_USER_ME,
+    payload: data
+  }
 }

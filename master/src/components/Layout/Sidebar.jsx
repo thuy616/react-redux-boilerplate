@@ -3,6 +3,7 @@ import { Router, Route, Link, History } from 'react-router';
 import pubsub from 'pubsub-js';
 import { Collapse } from 'react-bootstrap';
 import SidebarRun from './Sidebar.run';
+import { connect } from 'react-redux';
 
 class Sidebar extends React.Component {
 
@@ -22,6 +23,10 @@ class Sidebar extends React.Component {
             });
         });
     };
+
+    // componentWillMount() {
+    //   this.props.fetchCurrentUser();
+    // }
 
     componentDidMount() {
         SidebarRun();
@@ -128,5 +133,11 @@ Sidebar.contextTypes = {
         return React.PropTypes.func.isRequired;
     }
 };
+
+function mapStateToProps(state) {
+  return {
+    authenticated: state.auth.authenticated
+  }
+}
 
 export default Sidebar;

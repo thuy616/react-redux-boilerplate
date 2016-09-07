@@ -9,6 +9,16 @@ class Signin extends Component {
     this.props.signinUser(fields);
   }
 
+  renderErrorMessage() {
+    if (this.props.errorMessage) {
+      return (
+        <div className="alert alert-warning text-center">
+          <strong>Oops! </strong> {this.props.errorMessage}
+        </div>
+      );
+    }
+  }
+
   render() {
     const { handleSubmit, fields: { grant_type, email, password }} = this.props;
     return (
@@ -41,6 +51,7 @@ class Signin extends Component {
                   <a href="/recover" className="text-muted">Forgot your password?</a>
                 </div>
               </div>
+              {this.renderErrorMessage()}
               <button action="submit" className="btn btn-block btn-primary mt-lg">Login</button>
             </form>
             <p className="pt-lg text-center">Need to Signup?</p>
@@ -53,10 +64,14 @@ class Signin extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return { errorMessage: state.auth.error };
+}
+
 export default reduxForm({
   form: 'signin',
   fields: ['grant_type', 'email', 'password'],
   initialValues: {
     grant_type: 'password'
   }
-}, null, actions)(Signin);
+}, mapStateToProps, actions)(Signin);
