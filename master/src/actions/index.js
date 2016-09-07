@@ -1,7 +1,8 @@
 import config from '../../../config';
 import { browserHistory } from 'react-router';
 import fetch from 'isomorphic-fetch';
-import FormData from 'form-data';
+import { AUTH_USER } from './types';
+import Wreck from 'wreck';
 
 const CLIENT_ID = config.clientId;
 const CLIENT_SECRET = config.clientSecret;
@@ -29,17 +30,22 @@ export function signinUser(payload) {
           password: payload.password
         })
       })
-      .then((response) => { response.json() })
-      .then((value) => {
-        // if request is glyphicon-folder-open
-        // - update the state to indicate user is authenticated
-        // - save the auth token
-        // redirect to the route /Tours
-        browserHistory.push('/tours');
+      .then( (response) => response.json())
+      .then((body) => {
+        if (body.statusCode === 200) {
+          // - update the state to indicate user is authenticated
+          dispatch({ type: AUTH_USER });
+          // - save the auth token
+          localStorage.setItem('auth', body.data);
+          // redirect to the route /Tours
+          browserHistory.push('/tours');
+        } else {
+          // render error message
+        }
       })
-      .catch((error) => {
-        // if request is bad, show error to user
-      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 
