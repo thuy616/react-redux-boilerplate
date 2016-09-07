@@ -50,6 +50,12 @@ export function signinUser(payload) {
   }
 }
 
+export function signoutUser() {
+  localStorage.removeItem('auth');
+  dispatch({ type: UNAUTH_USER });
+  browserHistory.push('/signin');
+}
+
 export function fetchCurrentUser() {
   let auth = localStorage.getItem('auth');
 }

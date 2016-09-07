@@ -8,6 +8,7 @@ import routes from './routes';
 import configureStore from "./store.js";
 import { syncHistoryWithStore } from 'react-router-redux';
 import RadiumContainer from "./containers/RadiumContainer";
+import { AUTH_USER } from './actions/types';
 
 // Init translation system
 initTranslation();
@@ -19,6 +20,12 @@ delete window.__INITIAL_STATE__;
 const history = syncHistoryWithStore(browserHistory, store)
 
 const reactRoot = document.getElementById('app');
+const auth = localStorage.getItem('auth');
+// if we have an auth object, consider the user to be signed in
+if (auth) {
+  // update the application state
+  store.dispatch({ type: AUTH_USER });
+}
 
 ReactDOM.render(
   <Provider store={store}>
